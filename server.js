@@ -90,10 +90,51 @@ app.get('/erase', (request, response) => {
     fs.writeFile('data.json', '[]', (err) => {
         if (err) throw err;
         console.log('All data deleted from data.json');
-        response.send("ok")
+        response.send({message:"ok"})
     });
 });
 
+app.get('/sorted/:sortedType', (request, response) => {
+    fs.readFile('data.json', function read(err, data) {
+        if (err) {
+            throw err;
+        }
+        let list = JSON.parse(data);
+        let sType = request.params.sortedType;
+        if (sType == 'asc') {
+            list.sort((a, b) => {
+                if (a.name < b.name) return -1;
+                else if (a.name > b.name) return 1;
+                else return 0;
+            });
+        } else if (sType == 'desc') {
+            list.sort((a, b) => {
+                if (a.name > b.name) return -1;
+                else if (a.name < b.name) return 1;
+                else return 0;
+            });
+        }
+        console.log("sorted list", list);
+        response.send(list);
+    })
+
+});
+/*
+app.get('/:id', (request, response) => {
+    fs.readFile('data.json', function read(err, data) {
+        if (err) throw err;
+        let id = request.params.id;
+        let list = JSON.parse(data);
+        let found;
+        for (let i = 0; i < list.length; i++){
+            if (list[i].id == id) {
+                found = list[i];
+            }
+        }
+        response.send(found);
+    })
+});
+*/
 app.listen(3000, ()=> {
     console.log('Listening on port 3000. Post a file to http://localhost:3000 to save to /data.json');
 });
