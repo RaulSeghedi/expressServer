@@ -64,6 +64,9 @@ app.delete('/:id', (request, response) => {
     })
 });
 
+//client: http.put( http://localhost:3000/1, body = {id:1,...} )
+//server:
+
 app.put('/:id', (request, response) => {
     fs.readFile('data.json', (err, data) => {
         if (err) throw err;
@@ -93,6 +96,10 @@ app.get('/erase', (request, response) => {
         response.send({message:"ok"})
     });
 });
+
+
+//client: http:localhost:3000/sorted/asc
+
 
 app.get('/sorted/:sortedType', (request, response) => {
     fs.readFile('data.json', function read(err, data) {
